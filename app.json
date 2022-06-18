@@ -1,0 +1,38 @@
+{
+  "name": "airflow-heroku",
+  "description": "Run Airflow on Heroku",
+  "image": "heroku/python",
+  "env": {
+     "SLUGIFY_USES_TEXT_UNIDECODE": {
+      "description": "airflow gpl",
+      "value": "yes"
+    },
+    "AIRFLOW_HOME": {
+      "description": "Where all the information for airflow lives",
+      "value": "/app"
+    },
+    "AIRFLOW_SECRET_KEY": {
+      "description": "A secret key to verify the integrity of signed cookies",
+      "generator": "secret"
+    },
+    "PYTHONPATH": {
+      "description": "Path for python",
+      "value": "/app"
+    },
+    "AIRFLOW_FERNET_KEY": {
+      "description": "Fernet key should be generated as: python -c \"from cryptography.fernet import Fernet; print Fernet.generate_key()\"",
+      "value": "UZVLPCZL514XMWNpFh30vW57y1h3Q6STkGCGxd2qF4Y="
+    },
+    "AIRFLOW__CORE__SQL_ALCHEMY_CONN": {
+      "description": "url connect to airflow core backend DB",
+      "value": "postgres://bmzlfnumagwnfl:81c3f6d09dcc9e3f5a0a36aa83e6fbc432e2c3810d6e349e4cb41ef997501901@ec2-50-19-221-38.compute-1.amazonaws.com:5432/d12rb6i3rphsph"
+    }
+  },
+  "scripts": {
+    "postdeploy": "./init_env && python script/init_airflow_user.py"
+  },
+  "addons": [
+    "heroku-postgresql",
+    "mailgun:starter"
+  ]
+}
